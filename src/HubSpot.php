@@ -8,8 +8,11 @@
 
 namespace Flipbox\HubSpot;
 
+use Flipbox\HubSpot\Connections\ConnectionInterface;
+use Flipbox\HubSpot\Connections\IntegrationConnectionInterface;
 use Flipbox\Skeleton\Logger\StaticLoggerTrait;
 use Psr\Log\LoggerInterface;
+use Psr\SimpleCache\CacheInterface;
 
 /**
  * @author Flipbox Factory <hello@flipboxfactory.com>
@@ -20,9 +23,29 @@ class HubSpot
     use StaticLoggerTrait;
 
     /**
+     * @var CacheInterface
+     */
+    private static $cache;
+
+    /**
+     * @var ConnectionInterface
+     */
+    private static $connection;
+
+    /**
+     * @var IntegrationConnectionInterface
+     */
+    private static $integrationConnection;
+
+    /**
      * @var LoggerInterface
      */
     private static $logger;
+
+
+    /*******************************************
+     * LOGGER
+     *******************************************/
 
     /**
      * Get a logger
@@ -57,5 +80,80 @@ class HubSpot
         if (null !== ($logger = static::getLogger())) {
             $logger->log($level, $message, $context);
         }
+    }
+
+
+    /*******************************************
+     * CACHE
+     *******************************************/
+
+    /**
+     * Get the cache
+     *
+     * @return CacheInterface
+     */
+    public static function getCache(): CacheInterface
+    {
+        return self::$cache;
+    }
+
+    /**
+     * Set the cache
+     *
+     * @param CacheInterface $cache
+     */
+    public static function setCache(CacheInterface $cache)
+    {
+        self::$cache = $cache;
+    }
+
+
+    /*******************************************
+     * CONNECTION
+     *******************************************/
+
+    /**
+     * Get the connection
+     *
+     * @return ConnectionInterface
+     */
+    public static function getConnection(): ConnectionInterface
+    {
+        return self::$connection;
+    }
+
+    /**
+     * Set the connection
+     *
+     * @param ConnectionInterface $connection
+     */
+    public static function setConnection(ConnectionInterface $connection)
+    {
+        self::$connection = $connection;
+    }
+
+
+    /*******************************************
+     * INTEGRATION CONNECTION
+     *******************************************/
+
+    /**
+     * Get the integration connection
+     *
+     * @return IntegrationConnectionInterface
+     */
+    public static function getIntegrationConnection(): IntegrationConnectionInterface
+    {
+        return self::$integrationConnection;
+    }
+
+    /**
+     * Set the integration connection
+     *
+     * @param IntegrationConnectionInterface $integrationConnection
+     */
+    public static function setIntegrationConnection(IntegrationConnectionInterface $integrationConnection)
+    {
+        self::$integrationConnection = $integrationConnection;
     }
 }

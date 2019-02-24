@@ -33,8 +33,8 @@ class Hub
      * @return ResponseInterface
      */
     public static function dailyLimit(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
@@ -54,14 +54,14 @@ class Hub
      * @return callable
      */
     public static function dailyLimitRelay(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
         $builder = new Read(
-            $connection,
-            $cache,
+            $connection ?: HubSpot::getConnection(),
+            $cache ?: HubSpot::getCache(),
             $logger ?: HubSpot::getLogger(),
             $config
         );

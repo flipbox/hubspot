@@ -23,60 +23,56 @@ use Psr\SimpleCache\CacheInterface;
  */
 class TimelineEvent
 {
-    /*******************************************
-     * READ
-     *******************************************/
-
     /**
-     * @param IntegrationConnectionInterface $connection
-     * @param CacheInterface $cache
-     * @param string $identifier
+     * @param string $id
      * @param string $typeId
+     * @param IntegrationConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return ResponseInterface
      */
     public static function read(
-        IntegrationConnectionInterface $connection,
-        CacheInterface $cache,
-        string $identifier,
+        string $id,
         string $typeId,
+        IntegrationConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
-        return static::readRelay(
+        return static::rawHttpReadRelay(
+            $id,
+            $typeId,
             $connection,
             $cache,
-            $identifier,
-            $typeId,
             $logger,
             $config
         )();
     }
 
     /**
-     * @param IntegrationConnectionInterface $connection
-     * @param CacheInterface $cache
-     * @param string $identifier
+     * @param string $id
      * @param string $typeId
+     * @param IntegrationConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return callable
      */
-    public static function readRelay(
-        IntegrationConnectionInterface $connection,
-        CacheInterface $cache,
-        string $identifier,
+    public static function rawHttpReadRelay(
+        string $id,
         string $typeId,
+        IntegrationConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
         $builder = new Read(
             $connection->getAppId(),
             $typeId,
-            $identifier,
-            $connection,
-            $cache,
+            $id,
+            $connection ?: HubSpot::getIntegrationConnection(),
+            $cache ?: HubSpot::getCache(),
             $logger ?: HubSpot::getLogger(),
             $config
         );
@@ -85,66 +81,71 @@ class TimelineEvent
     }
 
 
+
     /*******************************************
-     * UPDATE
+     * UPSERT
      *******************************************/
 
     /**
-     * @param IntegrationConnectionInterface $connection
-     * @param CacheInterface $cache
-     * @param string $identifier
      * @param string $typeId
+     * @param string $id
      * @param array $payload
+     * @param IntegrationConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return ResponseInterface
      */
     public static function upsert(
-        IntegrationConnectionInterface $connection,
-        CacheInterface $cache,
-        string $identifier,
         string $typeId,
+        string $id,
         array $payload,
+        IntegrationConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
         return static::upsertRelay(
+            $typeId,
+            $id,
+            $payload,
             $connection,
             $cache,
-            $identifier,
-            $typeId,
-            $payload,
             $logger,
             $config
         )();
     }
 
     /**
-     * @param IntegrationConnectionInterface $connection
-     * @param CacheInterface $cache
-     * @param string $identifier
      * @param string $typeId
+     * @param string $id
      * @param array $payload
+     * @param IntegrationConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return callable
      */
     public static function upsertRelay(
-        IntegrationConnectionInterface $connection,
-        CacheInterface $cache,
-        string $identifier,
         string $typeId,
+        string $id,
         array $payload,
+        IntegrationConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
+
+        $payload['id'] = $id;
+        $payload['eventTypeId'] = $typeId;
+
         $builder = new Upsert(
             $connection->getAppId(),
             $typeId,
-            $identifier,
+            $id,
             $payload,
-            $connection,
-            $cache,
+            $connection ?: HubSpot::getIntegrationConnection(),
+            $cache ?: HubSpot::getCache(),
             $logger ?: HubSpot::getLogger(),
             $config
         );
@@ -158,43 +159,44 @@ class TimelineEvent
      *******************************************/
 
     /**
-     * @param IntegrationConnectionInterface $connection
      * @param array $payload
+     * @param IntegrationConnectionInterface|null $connection
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return ResponseInterface
      */
-    public static function batch(
-        IntegrationConnectionInterface $connection,
+    public function rawHttpBatch(
         array $payload,
+        IntegrationConnectionInterface $connection = null,
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
-        return static::batchRelay(
-            $connection,
+        return $this->rawHttpBatchRelay(
             $payload,
+            $connection,
             $logger,
             $config
         )();
     }
 
     /**
-     * @param IntegrationConnectionInterface $connection
      * @param array $payload
+     * @param IntegrationConnectionInterface|null $connection
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return callable
      */
-    public static function batchRelay(
-        IntegrationConnectionInterface $connection,
+    public function rawHttpBatchRelay(
         array $payload,
+        IntegrationConnectionInterface $connection = null,
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
+
         $builder = new Batch(
             $connection->getAppId(),
             $payload,
-            $connection,
+            $connection ?: HubSpot::getIntegrationConnection(),
             $logger ?: HubSpot::getLogger(),
             $config
         );

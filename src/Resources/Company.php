@@ -24,48 +24,57 @@ use Psr\SimpleCache\CacheInterface;
  */
 class Company
 {
+    /**
+     * @param string|null $identifier
+     * @return bool
+     */
+    protected static function upsertHasId(string $identifier = null): bool
+    {
+        return !empty($identifier);
+    }
 
     /*******************************************
      * CREATE
      *******************************************/
 
     /**
-     * @param ConnectionInterface $connection
      * @param array $payload
+     * @param ConnectionInterface|null $connection
      * @param LoggerInterface $logger
      * @param array $config
      * @return ResponseInterface
      */
     public static function create(
-        ConnectionInterface $connection,
         array $payload,
+        ConnectionInterface $connection = null,
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
         return static::createRelay(
-            $connection,
             $payload,
+            $connection,
             $logger,
             $config
         )();
     }
 
     /**
-     * @param ConnectionInterface $connection
      * @param array $payload
+     * @param ConnectionInterface|null $connection
      * @param LoggerInterface $logger
      * @param array $config
      * @return callable
      */
     public static function createRelay(
-        ConnectionInterface $connection,
         array $payload,
+        ConnectionInterface $connection = null,
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
+
         $builder = new Create(
             $payload,
-            $connection,
+            $connection ?: HubSpot::getConnection(),
             $logger ?: HubSpot::getLogger(),
             $config
         );
@@ -73,53 +82,55 @@ class Company
         return $builder->build();
     }
 
+
     /*******************************************
      * READ
      *******************************************/
 
     /**
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param string $identifier
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return ResponseInterface
      */
     public static function read(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
         string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
         return static::readRelay(
+            $identifier,
             $connection,
             $cache,
-            $identifier,
             $logger,
             $config
         )();
     }
 
     /**
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param string $identifier
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return callable
      */
     public static function readRelay(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
         string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
+
         $builder = new Read(
             $identifier,
-            $connection,
-            $cache,
+            $connection ?: HubSpot::getConnection(),
+            $cache ?: HubSpot::getCache(),
             $logger ?: HubSpot::getLogger(),
             $config
         );
@@ -135,52 +146,53 @@ class Company
     /**
      * @param string $identifier
      * @param array $payload
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return ResponseInterface
      */
     public static function update(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
         array $payload,
         string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
         return static::updateRelay(
-            $connection,
-            $cache,
             $payload,
             $identifier,
+            $connection,
+            $cache,
             $logger,
             $config
         )();
     }
 
     /**
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
-     * @param array $payload
      * @param string $identifier
+     * @param array $payload
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return callable
      */
     public static function updateRelay(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
         array $payload,
         string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
+
         $builder = new Update(
             $identifier,
             $payload,
-            $connection,
-            $cache,
+            $connection ?: HubSpot::getConnection(),
+            $cache ?: HubSpot::getCache(),
             $logger ?: HubSpot::getLogger(),
             $config
         );
@@ -188,22 +200,14 @@ class Company
         return $builder->build();
     }
 
+
     /*******************************************
      * UPSERT
      *******************************************/
 
     /**
-     * @param string|null $identifier
-     * @return bool
-     */
-    protected static function upsertHasId(string $identifier = null): bool
-    {
-        return !empty($identifier);
-    }
-
-    /**
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param array $payload
      * @param string|null $identifier
      * @param LoggerInterface|null $logger
@@ -211,26 +215,26 @@ class Company
      * @return ResponseInterface
      */
     public static function upsert(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
         array $payload,
         string $identifier = null,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
         return static::upsertRelay(
-            $connection,
-            $cache,
             $payload,
             $identifier,
+            $connection,
+            $cache,
             $logger,
             $config
         )();
     }
 
     /**
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param array $payload
      * @param string|null $identifier
      * @param LoggerInterface|null $logger
@@ -238,28 +242,28 @@ class Company
      * @return callable
      */
     public static function upsertRelay(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
         array $payload,
         string $identifier = null,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
 
         if (!static::upsertHasId($identifier)) {
             return static::createRelay(
-                $connection,
                 $payload,
+                $connection,
                 $logger,
                 $config
             );
         }
 
         return static::updateRelay(
-            $connection,
-            $cache,
             $payload,
             $identifier,
+            $connection,
+            $cache,
             $logger,
             $config
         );
@@ -272,23 +276,23 @@ class Company
 
     /**
      * @param string $identifier
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface $logger
      * @param array $config
      * @return ResponseInterface
      */
     public static function delete(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
         string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
         return static::deleteRelay(
+            $identifier,
             $connection,
             $cache,
-            $identifier,
             $logger,
             $config
         )();
@@ -296,23 +300,24 @@ class Company
 
     /**
      * @param string $identifier
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface $logger
      * @param array $config
      * @return callable
      */
     public static function deleteRelay(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
         string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
+
         $builder = new Delete(
             $identifier,
-            $connection,
-            $cache,
+            $connection ?: HubSpot::getConnection(),
+            $cache ?: HubSpot::getCache(),
             $logger ?: HubSpot::getLogger(),
             $config
         );

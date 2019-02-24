@@ -10,6 +10,7 @@ namespace Flipbox\HubSpot\Resources;
 
 use Flipbox\HubSpot\Connections\ConnectionInterface;
 use Flipbox\HubSpot\HubSpot;
+use Flipbox\Relay\Builder\RelayBuilderInterface;
 use Flipbox\Relay\HubSpot\Builder\Resources\ContactList\Contacts\Add;
 use Flipbox\Relay\HubSpot\Builder\Resources\ContactList\Contacts\All;
 use Flipbox\Relay\HubSpot\Builder\Resources\ContactList\Contacts\Remove;
@@ -23,53 +24,54 @@ use Psr\SimpleCache\CacheInterface;
  */
 class ContactListContacts
 {
+
     /*******************************************
      * READ
      *******************************************/
 
     /**
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
      * @param string $identifier
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return ResponseInterface
      */
-    public static function read(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
+    public static function all(
         string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
-        return static::readRelay(
+        return static::allRelay(
+            $identifier,
             $connection,
             $cache,
-            $identifier,
             $logger,
             $config
         )();
     }
 
     /**
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
      * @param string $identifier
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return callable
      */
-    public static function readRelay(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
+    public static function allRelay(
         string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
         $builder = new All(
             $identifier,
-            $connection,
-            $cache,
+            $connection ?: HubSpot::getConnection(),
+            $cache ?: HubSpot::getCache(),
             $logger ?: HubSpot::getLogger(),
             $config
         );
@@ -83,54 +85,55 @@ class ContactListContacts
      *******************************************/
 
     /**
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
-     * @param array $payload
      * @param string $identifier
+     * @param array $payload
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return ResponseInterface
      */
     public static function add(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
-        array $payload,
         string $identifier,
+        array $payload,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
         return static::addRelay(
+            $identifier,
+            $payload,
             $connection,
             $cache,
-            $payload,
-            $identifier,
             $logger,
             $config
         )();
     }
 
     /**
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
-     * @param array $payload
      * @param string $identifier
+     * @param array $payload
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return callable
      */
     public static function addRelay(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
-        array $payload,
         string $identifier,
+        array $payload,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
+        /** @var RelayBuilderInterface $builder */
         $builder = new Add(
             $identifier,
             $payload,
-            $connection,
-            $cache,
+            $connection ?: HubSpot::getConnection(),
+            $cache ?: HubSpot::getCache(),
             $logger ?: HubSpot::getLogger(),
             $config
         );
@@ -144,54 +147,55 @@ class ContactListContacts
      *******************************************/
 
     /**
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
-     * @param array $payload
      * @param string $identifier
+     * @param array $payload
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return ResponseInterface
      */
     public static function remove(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
-        array $payload,
         string $identifier,
+        array $payload,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
         return static::removeRelay(
+            $identifier,
+            $payload,
             $connection,
             $cache,
-            $payload,
-            $identifier,
             $logger,
             $config
         )();
     }
 
     /**
-     * @param ConnectionInterface $connection
-     * @param CacheInterface $cache
-     * @param array $payload
      * @param string $identifier
+     * @param array $payload
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
      * @param LoggerInterface|null $logger
      * @param array $config
      * @return callable
      */
     public static function removeRelay(
-        ConnectionInterface $connection,
-        CacheInterface $cache,
-        array $payload,
         string $identifier,
+        array $payload,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
+        /** @var RelayBuilderInterface $builder */
         $builder = new Remove(
             $identifier,
             $payload,
-            $connection,
-            $cache,
+            $connection ?: HubSpot::getConnection(),
+            $cache ?: HubSpot::getCache(),
             $logger ?: HubSpot::getLogger(),
             $config
         );
