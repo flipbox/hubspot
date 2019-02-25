@@ -70,7 +70,7 @@ class TimelineEventMutator extends AbstractCriteria
      */
     public function getId(): string
     {
-        return (string)($this->id ?: substr(str_shuffle(md5(time())),0, 36));
+        return (string)($this->id ?: substr(str_shuffle(md5(time())), 0, 36));
     }
 
     /**
