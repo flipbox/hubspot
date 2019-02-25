@@ -40,7 +40,7 @@ class TimelineEvent
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
-        return static::rawHttpReadRelay(
+        return static::readRelay(
             $id,
             $typeId,
             $connection,
@@ -59,7 +59,7 @@ class TimelineEvent
      * @param array $config
      * @return callable
      */
-    public static function rawHttpReadRelay(
+    public static function readRelay(
         string $id,
         string $typeId,
         IntegrationConnectionInterface $connection = null,
@@ -165,13 +165,13 @@ class TimelineEvent
      * @param array $config
      * @return ResponseInterface
      */
-    public function rawHttpBatch(
+    public static function batch(
         array $payload,
         IntegrationConnectionInterface $connection = null,
         LoggerInterface $logger = null,
         array $config = []
     ): ResponseInterface {
-        return $this->rawHttpBatchRelay(
+        return static::batchRelay(
             $payload,
             $connection,
             $logger,
@@ -186,7 +186,7 @@ class TimelineEvent
      * @param array $config
      * @return callable
      */
-    public function rawHttpBatchRelay(
+    public static function batchRelay(
         array $payload,
         IntegrationConnectionInterface $connection = null,
         LoggerInterface $logger = null,
