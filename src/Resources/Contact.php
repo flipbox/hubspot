@@ -130,16 +130,122 @@ class Contact
     ): callable {
 
         if (is_numeric($identifier)) {
-            $builder = new ReadById(
+            return static::readByIdRelay(
                 $identifier,
-                $connection ?: HubSpot::getConnection(),
-                $cache ?: HubSpot::getCache(),
-                $logger ?: HubSpot::getLogger(),
+                $connection,
+                $cache,
+                $logger,
                 $config
             );
-
-            return $builder->build();
         }
+
+        return static::readByEmailRelay(
+            $identifier,
+            $connection,
+            $cache,
+            $logger,
+            $config
+        );
+    }
+
+    /*******************************************
+     * READ BY EMAIL
+     *******************************************/
+
+    /**
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
+     * @param string $identifier
+     * @param LoggerInterface|null $logger
+     * @param array $config
+     * @return ResponseInterface
+     */
+    public static function readById(
+        string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
+        LoggerInterface $logger = null,
+        array $config = []
+    ): ResponseInterface {
+        return static::readByIdRelay(
+            $identifier,
+            $connection,
+            $cache,
+            $logger,
+            $config
+        )();
+    }
+
+    /**
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
+     * @param string $identifier
+     * @param LoggerInterface|null $logger
+     * @param array $config
+     * @return callable
+     */
+    public static function readByIdRelay(
+        string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
+        LoggerInterface $logger = null,
+        array $config = []
+    ): callable {
+
+        $builder = new ReadById(
+            $identifier,
+            $connection ?: HubSpot::getConnection(),
+            $cache ?: HubSpot::getCache(),
+            $logger ?: HubSpot::getLogger(),
+            $config
+        );
+
+        return $builder->build();
+    }
+
+    /*******************************************
+     * READ BY EMAIL
+     *******************************************/
+
+    /**
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
+     * @param string $identifier
+     * @param LoggerInterface|null $logger
+     * @param array $config
+     * @return ResponseInterface
+     */
+    public static function readByEmail(
+        string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
+        LoggerInterface $logger = null,
+        array $config = []
+    ): ResponseInterface {
+        return static::readByEmailRelay(
+            $identifier,
+            $connection,
+            $cache,
+            $logger,
+            $config
+        )();
+    }
+
+    /**
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
+     * @param string $identifier
+     * @param LoggerInterface|null $logger
+     * @param array $config
+     * @return callable
+     */
+    public static function readByEmailRelay(
+        string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
+        LoggerInterface $logger = null,
+        array $config = []
+    ): callable {
 
         $builder = new ReadByEmail(
             $identifier,

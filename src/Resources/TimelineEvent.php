@@ -67,11 +67,14 @@ class TimelineEvent
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
+
+        $connection = $connection ?: HubSpot::getIntegrationConnection();
+
         $builder = new Read(
             $connection->getAppId(),
             $typeId,
             $id,
-            $connection ?: HubSpot::getIntegrationConnection(),
+            $connection,
             $cache ?: HubSpot::getCache(),
             $logger ?: HubSpot::getLogger(),
             $config
@@ -97,8 +100,8 @@ class TimelineEvent
      * @return ResponseInterface
      */
     public static function upsert(
-        string $typeId,
         string $id,
+        string $typeId,
         array $payload,
         IntegrationConnectionInterface $connection = null,
         CacheInterface $cache = null,
@@ -127,8 +130,8 @@ class TimelineEvent
      * @return callable
      */
     public static function upsertRelay(
-        string $typeId,
         string $id,
+        string $typeId,
         array $payload,
         IntegrationConnectionInterface $connection = null,
         CacheInterface $cache = null,
@@ -139,12 +142,14 @@ class TimelineEvent
         $payload['id'] = $id;
         $payload['eventTypeId'] = $typeId;
 
+        $connection = $connection ?: HubSpot::getIntegrationConnection();
+
         $builder = new Upsert(
             $connection->getAppId(),
             $typeId,
             $id,
             $payload,
-            $connection ?: HubSpot::getIntegrationConnection(),
+            $connection,
             $cache ?: HubSpot::getCache(),
             $logger ?: HubSpot::getLogger(),
             $config
@@ -192,11 +197,12 @@ class TimelineEvent
         LoggerInterface $logger = null,
         array $config = []
     ): callable {
+        $connection = $connection ?: HubSpot::getIntegrationConnection();
 
         $builder = new Batch(
             $connection->getAppId(),
             $payload,
-            $connection ?: HubSpot::getIntegrationConnection(),
+            $connection,
             $logger ?: HubSpot::getLogger(),
             $config
         );
