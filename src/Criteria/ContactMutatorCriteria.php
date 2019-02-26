@@ -38,6 +38,7 @@ class ContactMutatorCriteria extends AbstractObjectMutator
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function update(array $criteria = [], array $config = []): ResponseInterface
     {
@@ -64,7 +65,7 @@ class ContactMutatorCriteria extends AbstractObjectMutator
 
         return Contact::upsert(
             $this->getPayload(),
-            $this->getId(),
+            $this->findId(),
             $this->getConnection(),
             $this->getCache(),
             $this->getLogger(),
@@ -76,6 +77,7 @@ class ContactMutatorCriteria extends AbstractObjectMutator
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function delete(array $criteria = [], array $config = []): ResponseInterface
     {

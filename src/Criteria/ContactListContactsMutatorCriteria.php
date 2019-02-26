@@ -17,13 +17,9 @@ use Psr\Http\Message\ResponseInterface;
  */
 class ContactListContactsMutatorCriteria extends AbstractCriteria
 {
-    use ConnectionTrait,
+    use IdAttributeTrait,
+        ConnectionTrait,
         CacheTrait;
-
-    /**
-     * @var string
-     */
-    public $id;
 
     /**
      * @var array
@@ -34,14 +30,6 @@ class ContactListContactsMutatorCriteria extends AbstractCriteria
      * @var array
      */
     public $emails = [];
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return (string)$this->id;
-    }
 
     /**
      * @return array
@@ -60,6 +48,7 @@ class ContactListContactsMutatorCriteria extends AbstractCriteria
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function add(array $criteria = [], array $config = []): ResponseInterface
     {
@@ -79,6 +68,7 @@ class ContactListContactsMutatorCriteria extends AbstractCriteria
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function remove(array $criteria = [], array $config = []): ResponseInterface
     {

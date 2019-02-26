@@ -21,6 +21,7 @@ class CompanyMutatorCriteria extends AbstractObjectMutator
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function create(array $criteria = [], array $config = []): ResponseInterface
     {
@@ -38,6 +39,7 @@ class CompanyMutatorCriteria extends AbstractObjectMutator
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function update(array $criteria = [], array $config = []): ResponseInterface
     {
@@ -64,7 +66,7 @@ class CompanyMutatorCriteria extends AbstractObjectMutator
 
         return Company::upsert(
             $this->getPayload(),
-            $this->getId(),
+            $this->findId(),
             $this->getConnection(),
             $this->getCache(),
             $this->getLogger(),
@@ -76,6 +78,7 @@ class CompanyMutatorCriteria extends AbstractObjectMutator
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function delete(array $criteria = [], array $config = []): ResponseInterface
     {

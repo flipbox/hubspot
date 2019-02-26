@@ -21,6 +21,7 @@ class ContactAccessorCriteria extends AbstractObjectAccessor
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function read(array $criteria = [], array $config = []): ResponseInterface
     {

@@ -17,25 +17,15 @@ use Psr\Http\Message\ResponseInterface;
  */
 class TimelineEventMutator extends AbstractCriteria
 {
-    use IntegrationConnectionTrait,
+    use TypeIdAttributeTrait,
+        IdAttributeTrait,
+        IntegrationConnectionTrait,
         CacheTrait;
-
-    /**
-     * @var string
-     */
-    public $id;
 
     /**
      * @var string|array
      */
     public $object;
-
-    /**
-     * The event type Id
-     *
-     * @var string
-     */
-    public $typeId;
 
     /**
      * @var array
@@ -60,17 +50,10 @@ class TimelineEventMutator extends AbstractCriteria
     /**
      * @return string
      */
-    public function getTypeId(): string
-    {
-        return $this->typeId;
-    }
-
-    /**
-     * @return string
-     */
     public function getId(): string
     {
-        return (string)($this->id ?: substr(str_shuffle(md5(time())), 0, 36));
+        $id = $this->findId();
+        return (string)($id ?: substr(str_shuffle(md5(time())), 0, 36));
     }
 
     /**
@@ -111,6 +94,7 @@ class TimelineEventMutator extends AbstractCriteria
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function upsert(array $criteria = [], array $config = []): ResponseInterface
     {

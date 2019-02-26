@@ -12,21 +12,23 @@ namespace Flipbox\HubSpot\Criteria;
  * @author Flipbox Factory <hello@flipboxfactory.com>
  * @since 2.0.0
  */
-trait IdAttributeTrait
+trait TypeIdAttributeTrait
 {
     /**
-     * @var string|null
+     * The type Id
+     *
+     * @var string
      */
-    protected $id;
+    protected $typeId;
 
     /**
      * @return string
      * @throws \Exception
      */
-    public function getId(): string
+    public function getTypeId(): string
     {
-        if (null === ($id = $this->findId())) {
-            throw new \Exception("Invalid Object Id");
+        if (null === ($id = $this->findTypeId())) {
+            throw new \Exception("Invalid Type Id");
         }
         return $id;
     }
@@ -34,18 +36,18 @@ trait IdAttributeTrait
     /**
      * @return string|null
      */
-    public function findId()
+    public function findTypeId()
     {
-        return $this->id;
+        return $this->typeId;
     }
 
     /**
      * @param string|null $id
      * @return $this
      */
-    public function setId(string $id = null)
+    public function setTypeId(string $id = null)
     {
-        $this->id = $id;
+        $this->typeId = $id;
         return $this;
     }
 }

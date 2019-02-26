@@ -21,6 +21,7 @@ class CompanyContactsAccessorCriteria extends AbstractObjectAccessor
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function all(array $criteria = [], array $config = []): ResponseInterface
     {

@@ -21,35 +21,80 @@ class CompanyContactsMutatorCriteria extends AbstractCriteria
         CacheTrait;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $companyId;
+    protected $companyId;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $contactId;
+    protected $contactId;
 
     /**
      * @return string
+     * @throws \Exception
      */
     public function getCompanyId(): string
     {
-        return (string)$this->companyId;
+        if (null === ($id = $this->findCompanyId())) {
+            throw new \Exception("Invalid Company Id");
+        }
+        return (string)$id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function findCompanyId()
+    {
+        return $this->companyId;
+    }
+
+    /**
+     * @param string|null $id
+     * @return $this
+     */
+    public function setCompanyId(string $id = null)
+    {
+        $this->companyId = $id;
+        return $this;
     }
 
     /**
      * @return string
+     * @throws \Exception
      */
     public function getContactId(): string
     {
-        return (string)$this->contactId;
+        if (null === ($id = $this->findContactId())) {
+            throw new \Exception("Invalid Contact Id");
+        }
+        return (string)$id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function findContactId()
+    {
+        return $this->contactId;
+    }
+
+    /**
+     * @param string|null $id
+     * @return $this
+     */
+    public function setContactId(string $id = null)
+    {
+        $this->contactId = $id;
+        return $this;
     }
 
     /**
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function add(array $criteria = [], array $config = []): ResponseInterface
     {
@@ -69,6 +114,7 @@ class CompanyContactsMutatorCriteria extends AbstractCriteria
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function remove(array $criteria = [], array $config = []): ResponseInterface
     {

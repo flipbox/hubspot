@@ -17,43 +17,16 @@ use Psr\Http\Message\ResponseInterface;
  */
 class TimelineEventAccessor extends AbstractCriteria
 {
-    use IntegrationConnectionTrait,
+    use IdAttributeTrait,
+        TypeIdAttributeTrait,
+        IntegrationConnectionTrait,
         CacheTrait;
-
-    /**
-     * The event Id
-     *
-     * @var string
-     */
-    public $id;
-
-    /**
-     * The event type Id
-     *
-     * @var string
-     */
-    public $typeId;
-
-    /**
-     * @return string
-     */
-    public function getTypeId(): string
-    {
-        return $this->typeId;
-    }
-
-    /**
-     * @return string
-     */
-    public function getId(): string
-    {
-        return (string)$this->id;
-    }
 
     /**
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
+     * @throws \Exception
      */
     public function read(array $criteria = [], array $config = []): ResponseInterface
     {
