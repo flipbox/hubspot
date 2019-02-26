@@ -15,7 +15,7 @@ use Psr\Http\Message\ResponseInterface;
  * @author Flipbox Factory <hello@flipboxfactory.com>
  * @since 2.0.0
  */
-class HubAccessorCriteriaCriteria extends AbstractCriteria
+class HubAccessorCriteria extends AbstractCriteria
 {
     use ConnectionTrait,
         CacheTrait;

@@ -15,7 +15,7 @@ use Psr\Http\Message\ResponseInterface;
  * @author Flipbox Factory <hello@flipboxfactory.com>
  * @since 2.0.0
  */
-class ContactCriteriaMutator extends AbstractObjectMutator
+class ContactMutatorCriteria extends AbstractObjectMutator
 {
     /**
      * @param array $criteria
