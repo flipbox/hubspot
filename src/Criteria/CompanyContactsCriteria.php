@@ -15,50 +15,16 @@ use Psr\Http\Message\ResponseInterface;
  * @author Flipbox Factory <hello@flipboxfactory.com>
  * @since 2.0.0
  */
-class CompanyContactsMutatorCriteria extends AbstractCriteria
+class CompanyContactsCriteria extends AbstractCriteria
 {
     use ConnectionTrait,
-        CacheTrait;
-
-    /**
-     * @var string|null
-     */
-    protected $companyId;
+        CacheTrait,
+        IdAttributeTrait;
 
     /**
      * @var string|null
      */
     protected $contactId;
-
-    /**
-     * @return string
-     * @throws \Exception
-     */
-    public function getCompanyId(): string
-    {
-        if (null === ($id = $this->findCompanyId())) {
-            throw new \Exception("Invalid Company Id");
-        }
-        return (string)$id;
-    }
-
-    /**
-     * @return string|null
-     */
-    public function findCompanyId()
-    {
-        return $this->companyId;
-    }
-
-    /**
-     * @param string|null $id
-     * @return $this
-     */
-    public function setCompanyId(string $id = null)
-    {
-        $this->companyId = $id;
-        return $this;
-    }
 
     /**
      * @return string
@@ -96,12 +62,31 @@ class CompanyContactsMutatorCriteria extends AbstractCriteria
      * @return ResponseInterface
      * @throws \Exception
      */
+    public function all(array $criteria = [], array $config = []): ResponseInterface
+    {
+        $this->populate($criteria);
+
+        return CompanyContacts::all(
+            $this->getId(),
+            $this->getConnection(),
+            $this->getCache(),
+            $this->getLogger(),
+            $config
+        );
+    }
+
+    /**
+     * @param array $criteria
+     * @param array $config
+     * @return ResponseInterface
+     * @throws \Exception
+     */
     public function add(array $criteria = [], array $config = []): ResponseInterface
     {
         $this->populate($criteria);
 
         return CompanyContacts::add(
-            $this->getCompanyId(),
+            $this->getId(),
             $this->getContactId(),
             $this->getConnection(),
             $this->getCache(),
@@ -121,7 +106,7 @@ class CompanyContactsMutatorCriteria extends AbstractCriteria
         $this->populate($criteria);
 
         return CompanyContacts::remove(
-            $this->getCompanyId(),
+            $this->getId(),
             $this->getContactId(),
             $this->getConnection(),
             $this->getCache(),

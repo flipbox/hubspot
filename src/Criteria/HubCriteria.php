@@ -8,27 +8,28 @@
 
 namespace Flipbox\HubSpot\Criteria;
 
-use Flipbox\HubSpot\Resources\Company;
+use Flipbox\HubSpot\Resources\Hub;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * @author Flipbox Factory <hello@flipboxfactory.com>
  * @since 2.0.0
  */
-class CompanyAccessorCriteria extends AbstractObjectAccessor
+class HubCriteria extends AbstractCriteria
 {
+    use ConnectionTrait,
+        CacheTrait;
+
     /**
      * @param array $criteria
      * @param array $config
      * @return ResponseInterface
-     * @throws \Exception
      */
-    public function read(array $criteria = [], array $config = []): ResponseInterface
+    public function dailyLimit(array $criteria = [], array $config = []): ResponseInterface
     {
         $this->populate($criteria);
 
-        return Company::read(
-            $this->getId(),
+        return Hub::dailyLimit(
             $this->getConnection(),
             $this->getCache(),
             $this->getLogger(),

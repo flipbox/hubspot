@@ -15,8 +15,32 @@ use Psr\Http\Message\ResponseInterface;
  * @author Flipbox Factory <hello@flipboxfactory.com>
  * @since 2.0.0
  */
-class CompanyMutatorCriteria extends AbstractObjectMutator
+class CompanyCriteria extends AbstractCriteria
 {
+    use ConnectionTrait,
+        CacheTrait,
+        IdAttributeTrait,
+        PayloadAttributeTrait;
+
+    /**
+     * @param array $criteria
+     * @param array $config
+     * @return ResponseInterface
+     * @throws \Exception
+     */
+    public function read(array $criteria = [], array $config = []): ResponseInterface
+    {
+        $this->populate($criteria);
+
+        return Company::read(
+            $this->getId(),
+            $this->getConnection(),
+            $this->getCache(),
+            $this->getLogger(),
+            $config
+        );
+    }
+
     /**
      * @param array $criteria
      * @param array $config

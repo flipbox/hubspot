@@ -8,41 +8,20 @@
 
 namespace Flipbox\HubSpot\Criteria;
 
-use Flipbox\HubSpot\Resources\ContactListContacts;
+use Flipbox\HubSpot\Resources\TimelineEvent;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * @author Flipbox Factory <hello@flipboxfactory.com>
  * @since 2.0.0
  */
-class ContactListContactsMutatorCriteria extends AbstractCriteria
+class TimelineEventCriteria extends AbstractCriteria
 {
-    use IdAttributeTrait,
-        ConnectionTrait,
-        CacheTrait;
-
-    /**
-     * @var array
-     */
-    public $vids = [];
-
-    /**
-     * @var array
-     */
-    public $emails = [];
-
-    /**
-     * @return array
-     */
-    public function getPayload(): array
-    {
-        return array_filter(
-            [
-                'vids' => array_filter($this->vids),
-                'emails' => array_filter($this->emails)
-            ]
-        );
-    }
+    use CacheTrait,
+        IdAttributeTrait,
+        TypeIdAttributeTrait,
+        IntegrationConnectionTrait,
+        PayloadAttributeTrait;
 
     /**
      * @param array $criteria
@@ -50,13 +29,13 @@ class ContactListContactsMutatorCriteria extends AbstractCriteria
      * @return ResponseInterface
      * @throws \Exception
      */
-    public function add(array $criteria = [], array $config = []): ResponseInterface
+    public function read(array $criteria = [], array $config = []): ResponseInterface
     {
         $this->populate($criteria);
 
-        return ContactListContacts::add(
+        return TimelineEvent::read(
             $this->getId(),
-            $this->getPayload(),
+            $this->getTypeId(),
             $this->getConnection(),
             $this->getCache(),
             $this->getLogger(),
@@ -70,12 +49,13 @@ class ContactListContactsMutatorCriteria extends AbstractCriteria
      * @return ResponseInterface
      * @throws \Exception
      */
-    public function remove(array $criteria = [], array $config = []): ResponseInterface
+    public function upsert(array $criteria = [], array $config = []): ResponseInterface
     {
         $this->populate($criteria);
 
-        return ContactListContacts::remove(
+        return TimelineEvent::upsert(
             $this->getId(),
+            $this->getTypeId(),
             $this->getPayload(),
             $this->getConnection(),
             $this->getCache(),

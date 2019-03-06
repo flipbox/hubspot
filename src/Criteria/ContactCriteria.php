@@ -8,15 +8,39 @@
 
 namespace Flipbox\HubSpot\Criteria;
 
-use Flipbox\HubSpot\Resources\ContactList;
+use Flipbox\HubSpot\Resources\Contact;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * @author Flipbox Factory <hello@flipboxfactory.com>
  * @since 2.0.0
  */
-class ContactListMutatorCriteria extends AbstractObjectMutator
+class ContactCriteria extends AbstractCriteria
 {
+    use ConnectionTrait,
+        CacheTrait,
+        IdAttributeTrait,
+        PayloadAttributeTrait;
+
+    /**
+     * @param array $criteria
+     * @param array $config
+     * @return ResponseInterface
+     * @throws \Exception
+     */
+    public function read(array $criteria = [], array $config = []): ResponseInterface
+    {
+        $this->populate($criteria);
+
+        return Contact::read(
+            $this->getId(),
+            $this->getConnection(),
+            $this->getCache(),
+            $this->getLogger(),
+            $config
+        );
+    }
+
     /**
      * @param array $criteria
      * @param array $config
@@ -26,7 +50,7 @@ class ContactListMutatorCriteria extends AbstractObjectMutator
     {
         $this->populate($criteria);
 
-        return ContactList::create(
+        return Contact::create(
             $this->getPayload(),
             $this->getConnection(),
             $this->getLogger(),
@@ -44,7 +68,7 @@ class ContactListMutatorCriteria extends AbstractObjectMutator
     {
         $this->populate($criteria);
 
-        return ContactList::update(
+        return Contact::update(
             $this->getPayload(),
             $this->getId(),
             $this->getConnection(),
@@ -63,7 +87,7 @@ class ContactListMutatorCriteria extends AbstractObjectMutator
     {
         $this->populate($criteria);
 
-        return ContactList::upsert(
+        return Contact::upsert(
             $this->getPayload(),
             $this->findId(),
             $this->getConnection(),
@@ -83,10 +107,27 @@ class ContactListMutatorCriteria extends AbstractObjectMutator
     {
         $this->populate($criteria);
 
-        return ContactList::delete(
+        return Contact::delete(
             $this->getId(),
             $this->getConnection(),
             $this->getCache(),
+            $this->getLogger(),
+            $config
+        );
+    }
+
+    /**
+     * @param array $criteria
+     * @param array $config
+     * @return ResponseInterface
+     */
+    public function batch(array $criteria = [], array $config = []): ResponseInterface
+    {
+        $this->populate($criteria);
+
+        return Contact::batch(
+            $this->getPayload(),
+            $this->getConnection(),
             $this->getLogger(),
             $config
         );

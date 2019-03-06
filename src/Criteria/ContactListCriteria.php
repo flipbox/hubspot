@@ -8,15 +8,39 @@
 
 namespace Flipbox\HubSpot\Criteria;
 
-use Flipbox\HubSpot\Resources\Contact;
+use Flipbox\HubSpot\Resources\ContactList;
 use Psr\Http\Message\ResponseInterface;
 
 /**
  * @author Flipbox Factory <hello@flipboxfactory.com>
  * @since 2.0.0
  */
-class ContactMutatorCriteria extends AbstractObjectMutator
+class ContactListCriteria extends AbstractCriteria
 {
+    use ConnectionTrait,
+        CacheTrait,
+        IdAttributeTrait,
+        PayloadAttributeTrait;
+
+    /**
+     * @param array $criteria
+     * @param array $config
+     * @return ResponseInterface
+     * @throws \Exception
+     */
+    public function read(array $criteria = [], array $config = []): ResponseInterface
+    {
+        $this->populate($criteria);
+
+        return ContactList::read(
+            $this->getId(),
+            $this->getConnection(),
+            $this->getCache(),
+            $this->getLogger(),
+            $config
+        );
+    }
+
     /**
      * @param array $criteria
      * @param array $config
@@ -26,7 +50,7 @@ class ContactMutatorCriteria extends AbstractObjectMutator
     {
         $this->populate($criteria);
 
-        return Contact::create(
+        return ContactList::create(
             $this->getPayload(),
             $this->getConnection(),
             $this->getLogger(),
@@ -44,7 +68,7 @@ class ContactMutatorCriteria extends AbstractObjectMutator
     {
         $this->populate($criteria);
 
-        return Contact::update(
+        return ContactList::update(
             $this->getPayload(),
             $this->getId(),
             $this->getConnection(),
@@ -63,7 +87,7 @@ class ContactMutatorCriteria extends AbstractObjectMutator
     {
         $this->populate($criteria);
 
-        return Contact::upsert(
+        return ContactList::upsert(
             $this->getPayload(),
             $this->findId(),
             $this->getConnection(),
@@ -83,7 +107,7 @@ class ContactMutatorCriteria extends AbstractObjectMutator
     {
         $this->populate($criteria);
 
-        return Contact::delete(
+        return ContactList::delete(
             $this->getId(),
             $this->getConnection(),
             $this->getCache(),
