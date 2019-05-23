@@ -92,14 +92,13 @@ class ContactListContactsCriteria extends AbstractCriteria
 
     /**
      * @return array
-     * @throws \Exception
      */
     public function getPayload(): array
     {
         return array_filter(
             [
-                'vids' => array_filter($this->getVids()),
-                'emails' => array_filter($this->getEmails())
+                'vids' => array_filter($this->findVids()),
+                'emails' => array_filter($this->findEmails())
             ]
         );
     }
