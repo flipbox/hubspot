@@ -109,8 +109,8 @@ class TimelineEvent
         array $config = []
     ): ResponseInterface {
         return static::upsertRelay(
-            $typeId,
             $id,
+            $typeId,
             $payload,
             $connection,
             $cache,
