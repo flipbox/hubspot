@@ -1,7 +1,7 @@
 # Changelog
 All Notable changes to `flipboxdigital\hubspot` will be documented in this file
 
-## 2.1.3
+## 2.2.0
 ### Added
 - Retrieve a contact by 'utk' token.
 
