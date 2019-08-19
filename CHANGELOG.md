@@ -1,6 +1,10 @@
 # Changelog
 All Notable changes to `flipboxdigital\hubspot` will be documented in this file
 
+## 2.1.3
+### Added
+- Retrieve a contact by 'utk' token.
+
 ## 2.1.2
 ### Fixed
 - incorrect attribute order

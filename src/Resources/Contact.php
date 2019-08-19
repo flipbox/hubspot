@@ -13,6 +13,7 @@ use Flipbox\HubSpot\HubSpot;
 use Flipbox\Relay\HubSpot\Builder\Resources\Contact\Batch;
 use Flipbox\Relay\HubSpot\Builder\Resources\Contact\Create;
 use Flipbox\Relay\HubSpot\Builder\Resources\Contact\Delete;
+use Flipbox\Relay\HubSpot\Builder\Resources\Contact\ReadByToken;
 use Flipbox\Relay\HubSpot\Builder\Resources\Contact\ReadByEmail;
 use Flipbox\Relay\HubSpot\Builder\Resources\Contact\ReadById;
 use Flipbox\Relay\HubSpot\Builder\Resources\Contact\Update;
@@ -139,6 +140,17 @@ class Contact
             );
         }
 
+        // If the identifier doesn't contain a '@' or '.' we'll treat it as a token
+        if (false !== strpos($identifier, '@') && false !== strpos($identifier, '.')) {
+            return static::readByTokenRelay(
+                $identifier,
+                $connection,
+                $cache,
+                $logger,
+                $config
+            );
+        }
+
         return static::readByEmailRelay(
             $identifier,
             $connection,
@@ -149,7 +161,7 @@ class Contact
     }
 
     /*******************************************
-     * READ BY EMAIL
+     * READ BY ID
      *******************************************/
 
     /**
@@ -258,6 +270,60 @@ class Contact
         return $builder->build();
     }
 
+    /*******************************************
+     * READ BY TOKEN
+     *******************************************/
+
+    /**
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
+     * @param string $identifier
+     * @param LoggerInterface|null $logger
+     * @param array $config
+     * @return ResponseInterface
+     */
+    public static function readByToken(
+        string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
+        LoggerInterface $logger = null,
+        array $config = []
+    ): ResponseInterface {
+        return static::readByTokenRelay(
+            $identifier,
+            $connection,
+            $cache,
+            $logger,
+            $config
+        )();
+    }
+
+    /**
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
+     * @param string $identifier
+     * @param LoggerInterface|null $logger
+     * @param array $config
+     * @return callable
+     */
+    public static function readByTokenRelay(
+        string $identifier,
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
+        LoggerInterface $logger = null,
+        array $config = []
+    ): callable {
+
+        $builder = new ReadByToken(
+            $identifier,
+            $connection ?: HubSpot::getConnection(),
+            $cache ?: HubSpot::getCache(),
+            $logger ?: HubSpot::getLogger(),
+            $config
+        );
+
+        return $builder->build();
+    }
 
     /*******************************************
      * UPDATE
