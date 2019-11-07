@@ -15,7 +15,7 @@
   ],
   "require": {
     "php": ">=7.0",
-    "flipboxdigital/relay-hubspot": "^1.0.5",
+    "flipboxdigital/relay-hubspot": "^1.1",
     "flipboxdigital/relay-simplecache": "~1.0",
     "guzzlehttp/guzzle":"~6.0"
   },

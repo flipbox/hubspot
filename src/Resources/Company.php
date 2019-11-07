@@ -12,6 +12,7 @@ use Flipbox\HubSpot\Connections\ConnectionInterface;
 use Flipbox\HubSpot\HubSpot;
 use Flipbox\Relay\HubSpot\Builder\Resources\Company\Create;
 use Flipbox\Relay\HubSpot\Builder\Resources\Company\Delete;
+use Flipbox\Relay\HubSpot\Builder\Resources\Company\ListByDomain;
 use Flipbox\Relay\HubSpot\Builder\Resources\Company\Read;
 use Flipbox\Relay\HubSpot\Builder\Resources\Company\Update;
 use Psr\Http\Message\ResponseInterface;
@@ -316,6 +317,68 @@ class Company
 
         $builder = new Delete(
             $identifier,
+            $connection ?: HubSpot::getConnection(),
+            $cache ?: HubSpot::getCache(),
+            $logger ?: HubSpot::getLogger(),
+            $config
+        );
+
+        return $builder->build();
+    }
+
+
+    /*******************************************
+     * LIST (by Domain)
+     *******************************************/
+
+    /**
+     * @param string $domain
+     * @param array $payload
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
+     * @param LoggerInterface|null $logger
+     * @param array $config
+     * @return ResponseInterface
+     */
+    public static function listByDomain(
+        string $domain,
+        array $payload = [],
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
+        LoggerInterface $logger = null,
+        array $config = []
+    ): ResponseInterface {
+        return static::listByDomainRelay(
+            $domain,
+            $payload,
+            $connection,
+            $cache,
+            $logger,
+            $config
+        )();
+    }
+
+    /**
+     * @param string $domain
+     * @param array $payload
+     * @param ConnectionInterface|null $connection
+     * @param CacheInterface|null $cache
+     * @param LoggerInterface|null $logger
+     * @param array $config
+     * @return callable
+     */
+    public static function listByDomainRelay(
+        string $domain,
+        array $payload = [],
+        ConnectionInterface $connection = null,
+        CacheInterface $cache = null,
+        LoggerInterface $logger = null,
+        array $config = []
+    ): callable {
+
+        $builder = new ListByDomain(
+            $domain,
+            $payload,
             $connection ?: HubSpot::getConnection(),
             $cache ?: HubSpot::getCache(),
             $logger ?: HubSpot::getLogger(),
