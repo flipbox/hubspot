@@ -1,6 +1,10 @@
 # Changelog
 All Notable changes to `flipboxdigital\hubspot` will be documented in this file
 
+## 2.4.0
+### Added
+- Email Resource management capabilities
+
 ## 2.3.0
 ### Added
 - List companies by 'domain'
