@@ -38,8 +38,7 @@ class EmailSubscriptions
         CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         return static::listRelay(
             $connection,
             $cache,
@@ -59,8 +58,7 @@ class EmailSubscriptions
         CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
-    ): callable
-    {
+    ): callable {
 
         $builder = new ListTypes(
             $connection ?: HubSpot::getConnection(),
@@ -91,8 +89,7 @@ class EmailSubscriptions
         CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         return static::readRelay(
             $email,
             $connection,
@@ -116,8 +113,7 @@ class EmailSubscriptions
         CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
-    ): callable
-    {
+    ): callable {
 
         $builder = new Read(
             $email,
@@ -150,8 +146,7 @@ class EmailSubscriptions
         CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
-    ): ResponseInterface
-    {
+    ): ResponseInterface {
         return static::updateRelay(
             $email,
             $payload,
@@ -178,8 +173,7 @@ class EmailSubscriptions
         CacheInterface $cache = null,
         LoggerInterface $logger = null,
         array $config = []
-    ): callable
-    {
+    ): callable {
 
         $builder = new Update(
             $email,
