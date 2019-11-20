@@ -130,6 +130,8 @@ class Contact
         array $config = []
     ): callable {
 
+
+
         if (is_numeric($identifier)) {
             return static::readByIdRelay(
                 $identifier,
@@ -141,7 +143,7 @@ class Contact
         }
 
         // If the identifier doesn't contain a '@' or '.' we'll treat it as a token
-        if (false !== strpos($identifier, '@') && false !== strpos($identifier, '.')) {
+        if (false === strpos($identifier, '@') && false === strpos($identifier, '.')) {
             return static::readByTokenRelay(
                 $identifier,
                 $connection,
