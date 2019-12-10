@@ -1,6 +1,10 @@
 # Changelog
 All Notable changes to `flipboxdigital\hubspot` will be documented in this file
 
+## Unreleased
+### Added
+- Blog Post retrieval capabilities
+
 ## 2.4.1
 ### Fixed
 - Retrieval via 'utk' token would trigger retrieval by email and vice-versa.
