@@ -1,7 +1,7 @@
 {
   "name": "flipboxdigital/hubspot",
   "description": "HubSpot RESTful API Resource Scaffolding.",
-  "version": "2.5.0",
+  "version": "3.0.0",
   "keywords": [
     "flipbox",
     "hubspot"
@@ -15,12 +15,10 @@
   ],
   "require": {
     "php": ">=7.0",
-    "flipboxdigital/relay-hubspot": "^1.3",
-    "flipboxdigital/relay-simplecache": "~1.0",
-    "guzzlehttp/guzzle":"~6.0"
+    "flipboxdigital/relay-hubspot": "dev-feature/php8"
   },
   "require-dev": {
-    "phpunit/phpunit": "^5.0",
+    "phpunit/phpunit": "^9.0",
     "psr/log": "^1.0.1",
     "squizlabs/php_codesniffer": "^2.0"
   },

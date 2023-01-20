@@ -1,6 +1,9 @@
 # Changelog
 All Notable changes to `flipboxdigital\hubspot` will be documented in this file
 
+## 3.0.0
+- Updated dependencies: `flipboxdigital/relay-hubspot` for php 8 compatibility
+
 ## 2.5.0
 ### Added
 - Blog Post retrieval capabilities
